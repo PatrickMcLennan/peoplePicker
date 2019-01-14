@@ -1,26 +1,33 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
+import Greeting from './routes/Greeting';
+import MyPeople from './routes/MyPeople';
+import NewPeople from './routes/NewPeople';
+import Header from './components/Header';
 
 class App extends Component {
+  state = {
+    people: [],
+  }
+
+  addPerson = (person) => {
+    const { people } = this.state;
+    this.setState({ people: [...people, person] });
+  };
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <Router>
+        <div className="App">
+          <Header />
+          <Switch>
+            <Route exact path="/" component={Greeting} />
+            <Route exact path="/myPeople" component={MyPeople} />
+            <Route eaxct path="/newPeople" render={routeProps => (<NewPeople {...routeProps} addPerson={this.addPerson} />)} />
+          </Switch>
+        </div>
+      </Router>
     );
   }
 }
